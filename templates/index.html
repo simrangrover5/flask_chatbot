@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <style>
+            #buttonInput{
+                color:whitesmoke;
+                background: black;
+                border-radius: 2px;
+                height: 5%;
+                width:6%;
+            }
+            input{
+                height: 7%;
+                width: 50%;
+            }
+            
+        </style>
+
+    </head>
+    <body style="background: black;">
+        <div id="chatbox">
+            <p class="botText"><span style="color:whitesmoke">Hi! I'm Chatterbot.</span></p>
+        </div>
+        <div id="userInput">
+            <input id="textInput" type="text" name="msg">
+            <input id="buttonInput" type="submit" value="SEND" >
+        
+        </div>
+        <script>
+            function getBotResponse() {
+            var rawText = $("#textInput").val();
+            var userHtml = '<p class="userText" style="color:white;"><span>' + rawText + '</span></p>';
+            $("#textInput").val("");
+            $("#chatbox").append(userHtml);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+            $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '<p class="botText" style="color:white;padding-left:100px;"><span>' + data + '</span></p>';
+            $("#chatbox").append(botHtml);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+            });
+            }
+            $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+            getBotResponse();
+            }
+            });
+            $("#buttonInput").click(function() {
+            getBotResponse();
+            })
+        </script>
+    </body>
+</html>
